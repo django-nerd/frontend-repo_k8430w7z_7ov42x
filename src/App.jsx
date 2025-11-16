@@ -109,11 +109,8 @@ function Login({ onLogin, dark }){
   const navigate = useNavigate()
   const submit = async (e)=>{
     e.preventDefault()
-    const form = new URLSearchParams()
-    form.set('username', email)
-    form.set('password', password)
-    const res = await fetch(`${API_BASE}/api/auth/login`, { method:'POST', headers:{ 'Content-Type':'application/x-www-form-urlencoded' }, body: form })
-    if(!res.ok){ alert('Login failed'); return }
+    const res = await fetch(`${API_BASE}/api/auth/login`, { method:'POST', headers:{ 'Content-Type':'application/json' }, body: JSON.stringify({ email, password }) })
+    if(!res.ok){ const err = await res.json().catch(()=>({detail:'Login failed'})); alert(err.detail||'Login failed'); return }
     const data = await res.json()
     onLogin(data)
     navigate('/')
