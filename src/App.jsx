@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { BrowserRouter, Routes, Route, Link, useNavigate, useParams, useLocation } from 'react-router-dom'
+import AdminPage from './pages/Admin.jsx'
 
 const API_BASE = import.meta.env.VITE_BACKEND_URL || 'http://localhost:8000'
 
@@ -30,6 +31,7 @@ function Navbar({ cartCount, user, onLogout, dark, setDark }) {
         </Link>
         {user ? (
           <div className="flex items-center gap-2">
+            {user.is_admin && <Link to="/admin" className="text-sm">Admin</Link>}
             <Link to="/orders" className="text-sm">Orders</Link>
             <span className="text-sm">Hi, {user.name}</span>
             <button onClick={onLogout} className="text-red-500 text-sm">Logout</button>
@@ -304,6 +306,7 @@ function AppShell(){
         <Route path="/checkout" element={<Checkout cart={cart} token={token} user={user} setCart={setCart} dark={dark} />} />
         <Route path="/orders" element={<Orders token={token} dark={dark} />} />
         <Route path="/product/:id" element={<ProductDetail onAdd={addToCart} token={token} dark={dark} />} />
+        <Route path="/admin" element={<AdminPage token={token} user={user} dark={dark} />} />
       </Routes>
     </BrowserRouter>
   )
